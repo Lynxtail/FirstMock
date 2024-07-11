@@ -29,6 +29,3 @@ public class Controller {
     }
     
 }
-
-// curl.exe -v -H "Accept: application/json" -H "Content-Type:application/json" -X POST --json '{\"login\":\"login\",\"password\":\"password\"}' http://localhost:8080/post_request
-// curl.exe -H "Content-Type:application/json" -X GET "http://localhost:8080/get_request"
