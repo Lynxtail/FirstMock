@@ -26,13 +26,20 @@ public class Controller {
 
     @PostMapping(value = "/post_request", consumes = "application/json", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-    public ResponseEntity<?> postRequest(@RequestBody User login) {
+    public ResponseEntity<?> postRequest(@RequestBody User user) {
+		System.out.println(String.format("\n\n\n%s\n%s\n%s\n\n\n", user.login, user.password, user.date));
 		try {
 			TimeUnit.SECONDS.sleep(2);
 		} catch (InterruptedException ie) {
 			Thread.currentThread().interrupt();
 		}
-        return new ResponseEntity<User>(login, HttpStatus.OK);
+		if (user.login == null || user.login.length() == 0){
+			return new ResponseEntity<HttpStatus>(HttpStatus.BAD_REQUEST);
+		}
+		if (user.password == null || user.password.length() == 0){
+			return new ResponseEntity<HttpStatus>(HttpStatus.BAD_REQUEST);
+		}
+        return new ResponseEntity<User>(user, HttpStatus.OK);
     }
     
 }
