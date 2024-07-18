@@ -1,8 +1,5 @@
 FROM ubuntu:latest as repo
 RUN apt-get update \
-    && apt-get install -y systemd \
-    && apt-get install -y curl \
-    && apt-get install -y sudo \
     && apt-get install -y git 
 RUN git clone https://github.com/Lynxtail/FirstMock.git
 
