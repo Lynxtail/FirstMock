@@ -1,18 +1,24 @@
-FROM ubuntu
-RUN apt-get install git \
-    && git clone https://github.com/Lynxtail/FirstMock.git
+FROM ubuntu:latest as repo
+RUN apt-get update \
+    && apt-get install -y systemd \
+    && apt-get install -y curl \
+    && apt-get install -y sudo \
+    && apt-get install -y git 
+RUN git clone https://github.com/Lynxtail/FirstMock.git
 
-FROM eclipse-temurin:17 as builder
+FROM maven:3.9.8-eclipse-temurin-17 as builder
 WORKDIR /app
-COPY .mvn/ .mvn
-COPY mvnw pom.xml ./
+COPY --from=repo /FirstMock/.mvn/ .mvn
+COPY --from=repo /FirstMock/mvnw /FirstMock/pom.xml ./
+RUN chmod +x mvnw
 RUN ./mvnw dependency:go-offline
-COPY ./src ./src
-COPY jolokia-agent-jvm-2.0.3-javaagent.jar ./
+COPY --from=repo /FirstMock/src ./src
 RUN ./mvnw clean install
+RUN ls -la
 
 FROM eclipse-temurin:17
-WORKDIR /app
-COPY --from=builder /app/target/*.jar /app/target/*.jar
+COPY --from=builder /app/target/*.jar ./app.jar
+COPY --from=repo /FirstMock/jolokia-agent-jvm-2.0.3-javaagent.jar ./jolokia.jar
 EXPOSE 8080
-ENTRYPOINT ["java", "-javaagent:/app/jolokia-agent-jvm-2.0.3-javaagent.jar", "-jar", "/app/target/*.jar"]
+RUN ["ls", "-la"]
+ENTRYPOINT ["java", "-javaagent:/jolokia.jar", "-jar", "/app.jar"]
