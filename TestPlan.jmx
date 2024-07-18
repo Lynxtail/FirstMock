@@ -5,6 +5,8 @@
       <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables">
         <collectionProp name="Arguments.arguments"/>
       </elementProp>
+      <boolProp name="TestPlan.functional_mode">false</boolProp>
+      <boolProp name="TestPlan.serialize_threadgroups">false</boolProp>
     </TestPlan>
     <hashTree>
       <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables">
@@ -16,7 +18,7 @@
           </elementProp>
           <elementProp name="address" elementType="Argument">
             <stringProp name="Argument.name">address</stringProp>
-            <stringProp name="Argument.value">localhost</stringProp>
+            <stringProp name="Argument.value">192.168.3.62</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="port" elementType="Argument">
@@ -38,7 +40,7 @@
         </elementProp>
       </ThreadGroup>
       <hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="/get_request">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="/get_request" enabled="true">
           <stringProp name="HTTPSampler.domain">${address}</stringProp>
           <stringProp name="HTTPSampler.port">${port}</stringProp>
           <stringProp name="HTTPSampler.protocol">${protocol}</stringProp>
@@ -52,7 +54,7 @@
           </elementProp>
         </HTTPSamplerProxy>
         <hashTree>
-          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager">
+          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
             <collectionProp name="HeaderManager.headers">
               <elementProp name="Content-Type" elementType="Header">
                 <stringProp name="Header.name">Content-Type</stringProp>
@@ -62,7 +64,7 @@
           </HeaderManager>
           <hashTree/>
         </hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="/post_request">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="/post_request" enabled="true">
           <stringProp name="HTTPSampler.domain">${address}</stringProp>
           <stringProp name="HTTPSampler.port">${port}</stringProp>
           <stringProp name="HTTPSampler.protocol">${protocol}</stringProp>
@@ -86,7 +88,7 @@
           </elementProp>
         </HTTPSamplerProxy>
         <hashTree>
-          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager">
+          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
             <collectionProp name="HeaderManager.headers">
               <elementProp name="Content-Type" elementType="Header">
                 <stringProp name="Header.name">Content-Type</stringProp>

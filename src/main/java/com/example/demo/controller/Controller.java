@@ -30,6 +30,7 @@ public class Controller {
     @PostMapping(value = "/post_request", consumes = "application/json", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
     public ResponseEntity<?> postRequest(@RequestBody Map<String,String> user) {
+		
 		Set<String> fields = Set.of("login", "password");
 		if (!(user.keySet().equals(fields))){
 			return new ResponseEntity<HttpStatus>(HttpStatus.BAD_REQUEST);
@@ -37,12 +38,13 @@ public class Controller {
 		else if (user.get("login").isEmpty() || user.get("password").isEmpty()){
 			return new ResponseEntity<HttpStatus>(HttpStatus.BAD_REQUEST);
 		}
+
 		try {
 			TimeUnit.SECONDS.sleep(2);
 		} catch (InterruptedException ie) {
 			Thread.currentThread().interrupt();
 		}
-        return new ResponseEntity<User>(new User(user.get("login"), user.get("password")), HttpStatus.OK);
+        return ResponseEntity.ok(new User(user.get("login"), user.get("password")));
     }
     
 }
