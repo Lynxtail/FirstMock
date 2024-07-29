@@ -12,7 +12,7 @@ import com.example.demo.user.User;
 
 public class ConnectAndRunQueries {    
 
-    String url = "jdbc:postgresql://192.168.3.62:5432/test_db";
+    String url = "jdbc:postgresql://192.168.3.64:5432/test_db";
     String username;
     String password;
     Connection con;
@@ -29,7 +29,7 @@ public class ConnectAndRunQueries {
         } catch (SQLException e) {
             System.out.print("An Exception: ");
             System.err.println(e.getMessage());
-            return null;
+            throw e;
         }
     }
 
