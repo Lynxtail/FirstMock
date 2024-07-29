@@ -1,14 +1,17 @@
 package com.example.demo.user;
-import java.time.LocalDate;
 
-public class User {
+import java.sql.Date;
+
+public class User {   
     public String login;
     public String password;
-    public LocalDate date;
-
-    public User(String login, String password){
+    public Date date;
+    public String email;
+    
+    public User(String login, String password, Date date, String email){
         this.login = login;
         this.password = password;
-        this.date = LocalDate.now();  
+        this.date = date;
+        this.email = email;
     }
 }
