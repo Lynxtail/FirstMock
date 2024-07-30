@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,9 @@ import com.example.demo.user.User;
 
 @RestController
 public class Controller {
+	@Autowired
+	private ConnectAndRunQueries db;
+
 	@GetMapping("/get_request")
 	public ResponseEntity<?> getRequest(@RequestParam String login) {
 		try {
@@ -29,7 +33,6 @@ public class Controller {
 			Thread.currentThread().interrupt();
 		}
 		try {
-			ConnectAndRunQueries db = new ConnectAndRunQueries("test_user", "test_password");
 			User user = db.select(login);
 			return new ResponseEntity<User>(user, HttpStatus.OK);
 		} catch (SQLException e) {
@@ -60,7 +63,6 @@ public class Controller {
 				Date.valueOf(user.get("date")),
 				user.get("email"));
 
-		ConnectAndRunQueries db = new ConnectAndRunQueries("test_user", "test_password");
 		db.insert(out_user);
 		return ResponseEntity.ok(out_user);
     }
