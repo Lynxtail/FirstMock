@@ -37,7 +37,7 @@ public class ConnectAndRunQueries {
             rs.next();
             User user = new User(rs.getString(1), rs.getString(2), 
                     rs.getDate(3), rs.getString(4));
-            FileWriter fileWriter = new FileWriter("output.txt");
+            FileWriter fileWriter = new FileWriter("/app/output.txt");
             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
             bufferedWriter.write(user.toString());
             bufferedWriter.close();
