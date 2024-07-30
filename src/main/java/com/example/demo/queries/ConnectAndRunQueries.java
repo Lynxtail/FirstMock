@@ -1,5 +1,7 @@
 package com.example.demo.queries;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -35,6 +37,10 @@ public class ConnectAndRunQueries {
             rs.next();
             User user = new User(rs.getString(1), rs.getString(2), 
                     rs.getDate(3), rs.getString(4));
+            FileWriter fileWriter = new FileWriter("output.txt");
+            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+            bufferedWriter.write(user.toString());
+            bufferedWriter.close();
             return user;
         } catch (SQLException e) {    
             System.out.println("Nothing was found");
