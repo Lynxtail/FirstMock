@@ -7,31 +7,16 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import org.springframework.stereotype.Component;
+
 import com.example.demo.user.User;
 
-
+@Component("db")
 public class ConnectAndRunQueries {    
 
-    String url = "jdbc:postgresql://192.168.3.64:5432/test_db";
-    String username;
-    String password;
-    Connection con;
-
-    public ConnectAndRunQueries(String username, String password){
-        this.username = username;
-        this.password = password;
-    }
-
-    public Connection connect() throws SQLException{
-        System.out.println("Trying connect to DB...");
-        try {
-            return DriverManager.getConnection(url, username, password);
-        } catch (SQLException e) {
-            System.out.print("An Exception: ");
-            System.err.println(e.getMessage());
-            throw e;
-        }
-    }
+    private final String url = "jdbc:postgresql://192.168.3.64:5432/test_db";
+    private final String username = "test_user";
+    private final String password = "test_password";
 
     public User select (String login) throws SQLException{
         String query = "select T1.login, T1.password, T1.date, T2.email "
@@ -41,47 +26,35 @@ public class ConnectAndRunQueries {
                         + "where T1.login = '"
                         + login + "'";
         
+        Statement st = null;
+        ResultSet rs = null;
         try {
-            con = connect();
-            System.out.println("Connection is established");
-        } catch (SQLException e) {
-            System.err.println(e.getMessage());
-        }
-        
-        try {
-            Statement st = con.createStatement();
-            ResultSet rs = st.executeQuery(query);
-            try {
-                rs.next();
-                User user = new User(rs.getString(1), rs.getString(2), 
-                        rs.getDate(3), rs.getString(4));
-                return user;
-            } catch (SQLException e) {
-                System.out.println("Nothing was found");
-                throw e;
-            }
-            finally {
-                rs.close();
-                st.close();
-            }
+            Connection con = DriverManager.getConnection(url, username, password);
+            st = con.createStatement();
+            rs = st.executeQuery(query);
+            rs.next();
+            User user = new User(rs.getString(1), rs.getString(2), 
+                    rs.getDate(3), rs.getString(4));
+            return user;
+        } catch (SQLException e) {    
+            System.out.println("Nothing was found");
+            throw e;
         } catch (Exception e) {
             System.err.println(e.getMessage());
             return null;
+        }
+        finally {
+            if (rs != null) rs.close();
+            if (st != null) st.close();
         }
     }
 
     public int insert(User user){
         String query = "insert into registration_data values (?, ?, ?);\n" + 
                         "insert into email_data values (?, ?);";
-        
-        try {
-            con = connect();
-            System.out.println("Connection is established");
-        } catch (SQLException e) {
-            System.err.println(e.getMessage());
-        }
-
-        try (PreparedStatement st = con.prepareStatement(query)) {
+    
+        try (Connection con = DriverManager.getConnection(url, username, password);
+             PreparedStatement st = con.prepareStatement(query)) {
             st.setString(1, user.login);
             st.setString(2, user.password);           
             st.setDate(3, user.date);           
