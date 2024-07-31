@@ -28,6 +28,12 @@ public class Controller {
 	@Autowired
 	private FileWorker file;
 
+	@GetMapping("/get_random_entry")
+	public ResponseEntity<?> getRandomEntry() {
+		return new ResponseEntity<String>(file.readFromFile(), HttpStatus.OK);
+	}
+	
+
 	@GetMapping("/get_request")
 	public ResponseEntity<?> getRequest(@RequestParam String login) {
 		try {
