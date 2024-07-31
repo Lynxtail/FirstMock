@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.files.FileWorker;
 import com.example.demo.queries.ConnectAndRunQueries;
 import com.example.demo.user.User;
 
@@ -24,6 +25,8 @@ import com.example.demo.user.User;
 public class Controller {
 	@Autowired
 	private ConnectAndRunQueries db;
+	@Autowired
+	private FileWorker file;
 
 	@GetMapping("/get_request")
 	public ResponseEntity<?> getRequest(@RequestParam String login) {
@@ -34,6 +37,7 @@ public class Controller {
 		}
 		try {
 			User user = db.select(login);
+			file.saveToFile(user.toString());
 			return new ResponseEntity<User>(user, HttpStatus.OK);
 		} catch (SQLException e) {
 			return new ResponseEntity<HttpStatus>(HttpStatus.INTERNAL_SERVER_ERROR);
