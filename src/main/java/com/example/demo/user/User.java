@@ -14,4 +14,9 @@ public class User {
         this.date = date;
         this.email = email;
     }
+
+    @Override
+    public String toString() {
+        return "{login:'" + login + "',password:'" + password + "',date'" + date + "',email:'" + email + "'}";
+    }
 }

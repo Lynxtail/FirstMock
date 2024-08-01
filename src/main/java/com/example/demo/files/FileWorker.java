@@ -1,41 +1,46 @@
 package com.example.demo.files;
 
-import java.io.BufferedWriter;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.RandomAccessFile;
+import java.io.LineNumberReader;
+import java.nio.file.Paths;
 import java.util.Random;
 
 import org.springframework.stereotype.Component;
 
 @Component("file")
 public class FileWorker {
-    public String filePathInput = "/app/input.txt";
-    public String filePathOutput = "/app/output.txt";
+    public String dir = Paths.get("").toAbsolutePath().toString();
+    public String filePathInput = dir + "\\input.txt";
+    public String filePathOutput = dir + "\\output.txt";
     
     public void saveToFile(String entry){
-        try (FileWriter fileWriter = new FileWriter(filePathOutput);
-            BufferedWriter writer = new BufferedWriter(fileWriter)){
-            writer.write(entry);
+        try (FileWriter fileWriter = new FileWriter(filePathOutput)){
+            fileWriter.write(entry);
         } catch (IOException e) {
             System.err.println(e.getMessage());
         }
     }
 
     public String readFromFile(){
-        // try (FileReader fileReader = new FileReader(filePathInput);
-        //     BufferedReader reader = new BufferedReader(fileReader)) {
-        //     reader.read    
-        try (RandomAccessFile reader = new RandomAccessFile(filePathInput, "r")){
+        int num;
+        
+        try (LineNumberReader reader = new LineNumberReader(new FileReader(filePathInput))) {
+            reader.skip(Integer.MAX_VALUE);
+            int numberOfLines = reader.getLineNumber();
             Random rnd = new Random();
-            long pointer = rnd.nextLong(reader.length() + 1);
-            reader.seek(pointer);
-            while (!(reader.readChar() == '\n')) {
-                pointer -= 2;
-                reader.seek(pointer);
+            num = rnd.nextInt(numberOfLines) + 1;
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            return null;
+        }
+
+        try (LineNumberReader reader = new LineNumberReader(new FileReader(filePathInput))) {
+            for (String line; (line = reader.readLine()) != null; ) {
+                if (reader.getLineNumber() == num) return line;
             }
-            reader.seek(pointer + 2);
-            return reader.readLine();
+            return null;
         } catch (Exception e) {
             System.err.println(e.getMessage());
             return null;
