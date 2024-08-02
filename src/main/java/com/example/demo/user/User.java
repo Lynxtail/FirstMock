@@ -17,6 +17,6 @@ public class User {
 
     @Override
     public String toString() {
-        return "{login:'" + login + "',password:'" + password + "',date'" + date + "',email:'" + email + "'}";
+        return "{\"login\":\"" + login + "\",\"password\":\"" + password + "\",\"date\":\"" + date + "\",\"email\":\"" + email + "\"}";
     }
 }
